@@ -1,6 +1,14 @@
-import React from "react";
 import { IProductButton } from "../interfaces";
 
-export const ProductButton = ({ styles, text }: IProductButton) => {
-  return <button className={styles}>{text}</button>;
+export const ProductButton = ({
+  className,
+  children,
+  width = "w-fit",
+  ...rest
+}: IProductButton) => {
+  return (
+    <button className={`${className} ${width}`} {...rest}>
+      {children}
+    </button>
+  );
 };

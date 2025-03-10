@@ -1,28 +1,26 @@
-import React from "react";
 import { ProductImage } from "./ProductImage";
 import { ProductButton } from "./ProductButton";
-
-export const ProductCard = () => {
+import { IProduct } from "../interfaces";
+interface IProps {
+  product: IProduct;
+}
+export const ProductCard = ({ product }: IProps) => {
   return (
     <div className="w-full border border-gray-300 rounded-md p-2 flex flex-col ">
       <ProductImage
         alt="product-img"
-        src="https://picsum.photos/150"
+        src={product.image}
         styles="rounded my-2"
       />
-      <h3 className="text-start">Car</h3>
-      <p className="text-start">
-        ProductCard Car ProductCard Car ProductCard Car ProductCard Car{" "}
-      </p>
+      <h3 className="text-start">{product.category}</h3>
+      <p className="text-start">{product.description} </p>
       <div className="flex gap-1 items-center my-2 ">
-        <span className="w-5 h-5 rounded-full bg-amber-50 " />
-        <span className="w-5 h-5 rounded-full bg-amber-800 " />
-        <span className="w-5 h-5 rounded-full bg-indigo-600" />
-        <span className="w-5 h-5 rounded-full bg-cyan-800 " />
-        <span className="w-5 h-5 rounded-full bg-lime-800" />
+        {product.colors.map((color) => (
+          <span className={`w-5 h-5 rounded-full bg-[${color}]`} key={color} />
+        ))}
       </div>
       <div className="flex justify-between items-center my-2 ">
-        <span className="">1000$</span>
+        <span className="">{product.price}$</span>
         <ProductImage
           alt="product-img"
           src="https://picsum.photos/150"
@@ -31,13 +29,23 @@ export const ProductCard = () => {
       </div>
       <div className="grid grid-cols-2 my-2 gap-1">
         <ProductButton
-          styles="!bg-blue-700 text-cyan-50 rounded-md"
-          text="Edit"
-        />
+          className="!bg-blue-700 text-cyan-50 rounded-md"
+          onClick={() => {
+            console.log("clicked");
+          }}
+          width="w-full"
+        >
+          Edit
+        </ProductButton>
         <ProductButton
-          styles="!bg-pink-900 text-white rounded-md"
-          text="Delete"
-        />
+          className="!bg-pink-900 text-white rounded-md"
+          onClick={() => {
+            console.log("clicked");
+          }}
+          width="w-full"
+        >
+          Delete
+        </ProductButton>
       </div>
     </div>
   );
