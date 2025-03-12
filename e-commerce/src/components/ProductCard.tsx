@@ -1,22 +1,27 @@
 import { ProductImage } from "./ProductImage";
 import { ProductButton } from "./ProductButton";
 import { IProduct } from "../interfaces";
+import { txtSlicer } from "../utils/functions";
 interface IProps {
   product: IProduct;
 }
 export const ProductCard = ({ product }: IProps) => {
   return (
-    <div className="w-full border border-gray-300 rounded-md p-2 flex flex-col ">
+    <div className="max-w-sm md:max-w-lg w-full border border-gray-300 rounded-md p-2 flex flex-col ">
       <ProductImage
         alt="product-img"
         src={product.image}
-        styles="rounded my-2"
+        styles="rounded mb-1 max-h-60"
       />
       <h3 className="text-start">{product.category}</h3>
-      <p className="text-start">{product.description} </p>
+      <p className="text-start">{txtSlicer(product.description)} </p>
       <div className="flex gap-1 items-center my-2 ">
         {product.colors.map((color) => (
-          <span className={`w-5 h-5 rounded-full bg-[${color}]`} key={color} />
+          <span
+            className={`w-5 h-5 rounded-full `}
+            key={color}
+            style={{ backgroundColor: `${color}` }}
+          />
         ))}
       </div>
       <div className="flex justify-between items-center my-2 ">
@@ -29,7 +34,8 @@ export const ProductCard = ({ product }: IProps) => {
       </div>
       <div className="grid grid-cols-2 my-2 gap-1">
         <ProductButton
-          className="!bg-blue-700 text-cyan-50 rounded-md"
+          className="!bg-[#3d1fc0]
+ text-cyan-50 rounded-md"
           onClick={() => {
             console.log("clicked");
           }}
@@ -38,7 +44,7 @@ export const ProductCard = ({ product }: IProps) => {
           Edit
         </ProductButton>
         <ProductButton
-          className="!bg-pink-900 text-white rounded-md"
+          className="!bg-[#cc2d1d] text-white rounded-md"
           onClick={() => {
             console.log("clicked");
           }}
