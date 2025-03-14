@@ -2,10 +2,22 @@ import { ProductImage } from "./ProductImage";
 import { ProductButton } from "./ProductButton";
 import { IProduct } from "../interfaces";
 import { txtSlicer } from "../utils/functions";
+import Modal from "./Modal";
+import { useState } from "react";
 interface IProps {
   product: IProduct;
 }
 export const ProductCard = ({ product }: IProps) => {
+  let [isOpen, setIsOpen] = useState(false);
+
+  function open() {
+    setIsOpen(true);
+  }
+
+  function close() {
+    setIsOpen(false);
+  }
+
   return (
     <div className="max-w-sm md:max-w-lg w-full border border-gray-300 rounded-md p-2 flex flex-col ">
       <ProductImage
@@ -35,9 +47,9 @@ export const ProductCard = ({ product }: IProps) => {
       <div className="grid grid-cols-2 my-2 gap-1">
         <ProductButton
           className="!bg-[#3d1fc0]
- text-cyan-50 rounded-md"
+        text-cyan-50 rounded-md"
           onClick={() => {
-            console.log("clicked");
+            open();
           }}
           width="w-full"
         >
@@ -53,6 +65,32 @@ export const ProductCard = ({ product }: IProps) => {
           Delete
         </ProductButton>
       </div>
+      {isOpen && (
+        <Modal isOpen={isOpen} close={close}>
+          {" "}
+          <div className="grid grid-cols-2 my-2 gap-1">
+            <ProductButton
+              className="!bg-[#3d1fc0]
+        text-cyan-50 rounded-md"
+              onClick={() => {
+                open();
+              }}
+              width="w-full"
+            >
+              Submit
+            </ProductButton>
+            <ProductButton
+              className="!bg-[#cc2d1d] text-white rounded-md"
+              onClick={() => {
+                close();
+              }}
+              width="w-full"
+            >
+              Delete
+            </ProductButton>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+html {
+  padding-right: 0px !important;
+  overflow: auto !important;
+
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   background: linear-gradient(135deg, #f4f2f2, #f6f5f4);

@@ -1,4 +1,3 @@
-import React from "react";
 import { IProductImage } from "../interfaces";
 
 export const ProductImage = ({ alt, src, styles }: IProductImage) => {
