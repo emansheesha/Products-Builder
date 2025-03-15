@@ -8,7 +8,7 @@ interface IProps {
   product: IProduct;
 }
 export const ProductCard = ({ product }: IProps) => {
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   function open() {
     setIsOpen(true);
@@ -23,10 +23,10 @@ export const ProductCard = ({ product }: IProps) => {
       <ProductImage
         alt="product-img"
         src={product.image}
-        styles="rounded mb-1 max-h-60"
+        styles="rounded max-h-54"
       />
-      <h3 className="text-start">{product.category}</h3>
-      <p className="text-start">{txtSlicer(product.description)} </p>
+      <h3 className="text-start text-zinc-700 font-semibold text-xl my-2">{product.category}</h3>
+      <p className="text-start font-normal text-sm">{txtSlicer(product.description)} </p>
       <div className="flex gap-1 items-center my-2 ">
         {product.colors.map((color) => (
           <span
@@ -46,7 +46,7 @@ export const ProductCard = ({ product }: IProps) => {
       </div>
       <div className="grid grid-cols-2 my-2 gap-1">
         <ProductButton
-          className="!bg-[#3d1fc0]
+          className="!bg-[#673ab7]
         text-cyan-50 rounded-md"
           onClick={() => {
             open();
@@ -56,7 +56,7 @@ export const ProductCard = ({ product }: IProps) => {
           Edit
         </ProductButton>
         <ProductButton
-          className="!bg-[#cc2d1d] text-white rounded-md"
+          className="!bg-[#bf1808] text-white rounded-md"
           onClick={() => {
             console.log("clicked");
           }}
@@ -68,9 +68,9 @@ export const ProductCard = ({ product }: IProps) => {
       {isOpen && (
         <Modal isOpen={isOpen} close={close}>
           {" "}
-          <div className="grid grid-cols-2 my-2 gap-1">
+          <div className="my-2">
             <ProductButton
-              className="!bg-[#3d1fc0]
+              className="!bg-[#673ab7]
         text-cyan-50 rounded-md"
               onClick={() => {
                 open();
@@ -78,15 +78,6 @@ export const ProductCard = ({ product }: IProps) => {
               width="w-full"
             >
               Submit
-            </ProductButton>
-            <ProductButton
-              className="!bg-[#cc2d1d] text-white rounded-md"
-              onClick={() => {
-                close();
-              }}
-              width="w-full"
-            >
-              Delete
             </ProductButton>
           </div>
         </Modal>
