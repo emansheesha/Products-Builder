@@ -21,6 +21,12 @@ export interface IProduct {
     category?: string;
 
 }
+export interface IFormProduct {
+    title: string;
+    description: string;
+    image: string;
+    price: string;
+}
 export interface IFormInput {
     title: "title" |
     "description" |
