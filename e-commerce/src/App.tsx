@@ -5,8 +5,9 @@ import { formInputs, products } from "./data";
 import Modal from "./components/Modal";
 import { ProductButton } from "./components/ProductButton";
 import { InputFrom } from "./components/InputFrom";
-import { IProduct } from "./interfaces";
+import { IFormProduct, IProduct } from "./interfaces";
 import { productValidation } from "./validation";
+import MsgError from "./components/MsgError";
 
 function App() {
   const defaultProductObj = {
@@ -17,6 +18,12 @@ function App() {
   };
   const [isOpen, setIsOpen] = useState(false);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
+  const [error, setError] = useState<IFormProduct>({
+    title: "",
+    description: "",
+    image: "",
+    price: "",
+  });
 
   function open() {
     setIsOpen(true);
@@ -28,14 +35,20 @@ function App() {
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setProduct({ ...product, [name]: value });
+    setError({ ...error, [name]: "" });
   };
   console.log("productForm", product);
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const errors = productValidation(product);
+    setError(errors);
     console.log(product, errors);
-    setProduct(defaultProductObj);
+    const hasErrorMsg = Object.values(errors).every((value) => value === "");
+    if (!hasErrorMsg) return;
+
     close();
+    console.log("Send Data To Server", Object.values(errors));
+    setProduct(defaultProductObj);
   };
 
   return (
@@ -65,6 +78,7 @@ function App() {
                     onChange={onChangeHandler}
                     value={product[input.title]}
                   />
+                  <MsgError msg={error[input.title]} />
                 </div>
               ))}
             </div>
