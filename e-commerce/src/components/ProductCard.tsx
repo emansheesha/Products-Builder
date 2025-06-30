@@ -28,7 +28,7 @@ export const ProductCard = ({ product }: IProps) => {
       <h3 className="text-start text-zinc-700 font-semibold text-xl my-2">{product.category}</h3>
       <p className="text-start font-normal text-sm">{txtSlicer(product.description)} </p>
       <div className="flex gap-1 items-center my-2 ">
-        {product.colors.map((color) => (
+        {product?.colors?.map((color) => (
           <span
             className={`w-5 h-5 rounded-full `}
             key={color}

@@ -1,13 +1,14 @@
 import { ChangeEvent, useState } from "react";
 import "./App.css";
 import { ProductCard } from "./components/ProductCard";
-import { formInputs, products } from "./data";
+import { COLORS, formInputs, products } from "./data";
 import Modal from "./components/Modal";
 import { ProductButton } from "./components/ProductButton";
 import { InputFrom } from "./components/InputFrom";
 import { IFormProduct, IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import MsgError from "./components/MsgError";
+import { CircleColors } from "./components/CircleColors";
 
 function App() {
   const defaultProductObj = {
@@ -17,6 +18,7 @@ function App() {
     price: "",
   };
   const [isOpen, setIsOpen] = useState(false);
+  const [colorState , setColorState] =useState<string[]>([])
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
   const [error, setError] = useState<IFormProduct>({
     title: "",
@@ -50,7 +52,10 @@ function App() {
     console.log("Send Data To Server", Object.values(errors));
     setProduct(defaultProductObj);
   };
-
+const handleColorCircles = (color: string)=>{
+  setColorState((prev)=> prev.find(col=>col===color) ? prev.filter((col=>col !== color)) :[...prev,color])
+  
+}
   return (
     <>
       <ProductButton
@@ -81,6 +86,12 @@ function App() {
                   <MsgError msg={error[input.title]} />
                 </div>
               ))}
+            </div>
+            <div className="flex gap-2">
+              {colorState.map((color)=><CircleColors  key ={color} color={color} />)}
+            </div>
+            <div className="flex gap-2">
+              {COLORS.map((color)=><CircleColors  key ={color} color={color} onClick={()=>{handleColorCircles(color)}}/>)}
             </div>
             <div className="my-2 grid grid-cols-2 gap-1">
               <ProductButton
