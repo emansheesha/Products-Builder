@@ -53,8 +53,7 @@ function App() {
     setProduct(defaultProductObj);
   };
 const handleColorCircles = (color: string)=>{
-  setColorState((prev)=> prev.find(col=>col===color) ? prev.filter((col=>col !== color)) :[...prev,color])
-  
+  setColorState((prev)=> prev.find(col=>col===color) ? prev.filter((col=>col !== color)) :[...prev,color]) 
 }
   return (
     <>
@@ -88,7 +87,7 @@ const handleColorCircles = (color: string)=>{
               ))}
             </div>
             <div className="flex gap-2">
-              {colorState.map((color)=><CircleColors  key ={color} color={color} />)}
+              {colorState.map((color)=><span key={color} className="rounded-xl w-3xl h-8 block" style={{backgroundColor:color}}></span>)}
             </div>
             <div className="flex gap-2">
               {COLORS.map((color)=><CircleColors  key ={color} color={color} onClick={()=>{handleColorCircles(color)}}/>)}
