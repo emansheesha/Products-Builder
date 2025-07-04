@@ -6,27 +6,36 @@ export const products = [
         title: "Product 1",
         description: "This is a description of Product 1 This is a description of Product 1 This is a description of Product 1.",
         image: "https://picsum.photos/150",
-        category: "product1",
+        category: {
+            id: 41,
+            image: "https://picsum.photos/150",
+        },
         price: "29.99",
-        colors: ["#ffffff", "#000000", "#f1c40f", "#e74c3c", "#8e44ad"]
+        colors: ["#820000", "#FF0032"]
     },
     {
         id: 2,
         title: "Product 2",
         description: "This is a description of Product 2 This is a description of Product 2 This is a description of Product 2 This is a description of Product 2.",
         image: "https://picsum.photos/150",
-        category: "product1",
+        category:  {
+            id: 11,
+            image: "https://picsum.photos/150",
+        },
         price: "49.99",
-        colors: ["#ff0000", "#00ff00", "#0000ff", "#f1c40f", "#e74c3c", "#8e44ad"]
+        colors: ["#A31ACB", "#3C2A21", "#1F8A70", "#820000", "#FF0032"]
     },
     {
         id: 3,
         title: "Product 3",
         description: "This is a description of Product 3 This is a description of Product 2 This is a description of Product 2 .",
         image: "https://picsum.photos/150",
-        category: "product1",
+        category:  {
+            id: 411,
+            image: "https://picsum.photos/150",
+        },
         price: "19.99",
-        colors: ["#f1c40f", "#e74c3c", "#8e44ad", "#ff0000", "#00ff00", "#0000ff"]
+        colors: ["#A31ACB", "#3C2A21", "#1F8A70", "#820000", "#FF0032"]
     },
     {
 
@@ -34,18 +43,24 @@ export const products = [
         title: "Product 1",
         description: "This is a description of Product 1 This  is a description of Product 2 This is a description of Product 2.",
         image: "https://picsum.photos/150",
-        category: "product1",
+        category:  {
+            id: 411,
+            image: "https://picsum.photos/150",
+        },
         price: "29.99",
-        colors: ["#ff0000", "#00ff00", "#0000ff", "#ffffff", "#000000"]
+        colors: ["#A31ACB",  "#1F8A70", "#820000", "#FF0032"]
     },
     {
         id: 4,
         title: "Product 2",
         description: "This is a description of Product 2 This is a hiiiiiii of Product 2 This is a description of Product 2.",
         image: "https://picsum.photos/150",
-        category: "product1",
+        category:  {
+            id: 413,
+            image: "https://picsum.photos/150",
+        },
         price: "49.99",
-        colors: ["#ff0000", "#00ff00", "#0000ff"]
+        colors: ["#A31ACB", "#3C2A21", "#1F8A70", "#820000"]
     },
 ];
 
@@ -82,3 +97,26 @@ export const formInputs: IFormInput[] = [
 ]
 
 export const COLORS = ["#A31ACB", "#3C2A21", "#1F8A70", "#820000", "#FF0032"];
+
+export const Category= [
+    {
+        id: 4,
+        image: "https://picsum.photos/150",
+        category: "nike",
+    },
+    {
+        id: 3,
+        image: "https://picsum.photos/150",
+        category: "shirt",
+    },
+    {
+        id: 2,
+        image: "https://picsum.photos/150",
+        category: "shoes",
+    },
+    {
+        id: 1,
+        image: "https://picsum.photos/150",
+        category: "pantalon",
+    },
+]

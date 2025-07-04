@@ -1,12 +1,15 @@
-import { IFormProduct } from "../interfaces";
+import {  IFormProduct, IFormProductError } from "../interfaces";
 
 export const productValidation = (product: IFormProduct) => {
-    const errors: IFormProduct = {
+    const errors: IFormProductError = {
         title: '',
         description: '',
         price: '',
-        image: ''
+        image: '',
+        color: ''
     }
+    console.log("product",product);
+    
     const titleLength = product.title.length;
     const descriptionLength = product.description.length;
     const fileImg = "https?:\/\/.*\.(png|jpe?g|gif|webp|bmp|tiff?)";
@@ -21,6 +24,9 @@ export const productValidation = (product: IFormProduct) => {
     }
     if (!product.image.trim() || !fileImg) {
         errors.image = "enter valid image";
+    }
+    if (product?.colors !== undefined && !product?.colors.length) {
+        errors.color = "enter valid colors";
     }
     return errors;
 

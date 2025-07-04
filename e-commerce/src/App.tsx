@@ -1,14 +1,15 @@
 import { ChangeEvent, useState } from "react";
 import "./App.css";
 import { ProductCard } from "./components/ProductCard";
-import { COLORS, formInputs, products } from "./data";
+import { COLORS, Category, formInputs, products } from "./data";
 import Modal from "./components/Modal";
 import { ProductButton } from "./components/ProductButton";
 import { InputFrom } from "./components/InputFrom";
-import { IFormProduct, IProduct } from "./interfaces";
+import { IFormProductError, IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import MsgError from "./components/MsgError";
 import { CircleColors } from "./components/CircleColors";
+import Select from "./components/Select";
 
 function App() {
   const defaultProductObj = {
@@ -16,15 +17,24 @@ function App() {
     description: "",
     image: "",
     price: "",
+    id: 0,
+    colors: [],
   };
   const [isOpen, setIsOpen] = useState(false);
-  const [colorState , setColorState] =useState<string[]>([])
+  const [colorState, setColorState] = useState<string[]>([]);
+  const [productsData, setProductsData] = useState<any[]>(products);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
-  const [error, setError] = useState<IFormProduct>({
+  const [selected, setSelected] = useState(Category[3]);
+  const [productToEdit, setProductToEdit] =
+    useState<IProduct>(defaultProductObj);
+  const [isEdit, setIsEdit] = useState(false);
+  console.log(selected);
+  const [error, setError] = useState<IFormProductError>({
     title: "",
     description: "",
     image: "",
     price: "",
+    color: "",
   });
 
   function open() {
@@ -36,31 +46,82 @@ function App() {
   }
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setProduct({ ...product, [name]: value });
+    console.log(name);
+
+    if (isEdit) {
+      setProductToEdit({ ...productToEdit, [name]: value });
+    } else {
+      setProduct({ ...product, [name]: value });
+    }
     setError({ ...error, [name]: "" });
   };
-  console.log("productForm", product);
+
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const errors = productValidation(product);
-    setError(errors);
-    console.log(product, errors);
-    const hasErrorMsg = Object.values(errors).every((value) => value === "");
-    if (!hasErrorMsg) return;
+    console.log(product, colorState, isEdit);
 
-    close();
-    console.log("Send Data To Server", Object.values(errors));
+    if (isEdit) {
+      const errors = productValidation({...productToEdit, colors:[...colorState]});
+      setError(errors);
+      const hasErrorMsg = Object.values(errors).every((value) => value === "");
+      if (!hasErrorMsg) return;
+      setProductsData((prev) =>
+        prev.map((prod) =>
+          prod.id === productToEdit.id ? {...productToEdit,colors:[...colorState]} : prod
+        )
+      );
+    } else {
+      const errors = productValidation({
+        ...product,
+        colors: [...colorState],
+            });
+      setError(errors);
+      const hasErrorMsg = Object.values(errors).every((value) => value === "");
+      console.log(product, colorState, errors);
+      if (!hasErrorMsg) return;
+      console.log(colorState)
+      setProductsData((prev) => [
+        ...prev,
+        {
+          ...product,
+          id: Math.floor(Math.random() * 100),
+          colors: [...colorState],
+          category: selected,
+        },
+      ]);
+    }
+    console.log("Send Data To Server", productsData);
+    setColorState([]);
     setProduct(defaultProductObj);
+    setIsEdit(false);
+    console.log(product);
+    setProductToEdit(defaultProductObj);
+    close();
+    console.log("Send Data To Server", productsData);
   };
-const handleColorCircles = (color: string)=>{
-  setColorState((prev)=> prev.find(col=>col===color) ? prev.filter((col=>col !== color)) :[...prev,color]) 
-}
+  const handleColorCircles = (color: string) => {
+    setColorState((prev) =>
+      prev.find((col) => col === color)
+        ? prev.filter((col) => col !== color)
+        : [...prev, color]
+    );
+  };
+  const handleEditData = (product: IProduct) => {
+    open();
+    setIsEdit(true);
+    console.log(product);
+    setProductToEdit(product);
+    {
+      product?.colors && setColorState(product?.colors);
+    }
+  };
   return (
     <>
       <ProductButton
         className="!bg-[#673ab7]
         text-cyan-50 rounded-md mb-4 ms-auto block"
         onClick={() => {
+          setIsEdit(false);
           open();
         }}
         width="w-fit"
@@ -80,18 +141,40 @@ const handleColorCircles = (color: string)=>{
                     id={input.id}
                     name={input.title}
                     onChange={onChangeHandler}
-                    value={product[input.title]}
+                    value={
+                      isEdit ? productToEdit[input.title] : product[input.title]
+                    }
                   />
                   <MsgError msg={error[input.title]} />
                 </div>
               ))}
             </div>
-            <div className="flex gap-2">
-              {colorState.map((color)=><span key={color} className="rounded-xl w-3xl h-8 block" style={{backgroundColor:color}}></span>)}
+            <div className="flex gap-2 mb-3">
+              {colorState.map((color) => (
+                <span
+                  key={color}
+                  className="rounded-md w-17 h-6 block p-0.5 text-sm text-white "
+                  style={{ backgroundColor: color }}
+                >
+                  {color}
+                </span>
+              ))}
             </div>
             <div className="flex gap-2">
-              {COLORS.map((color)=><CircleColors  key ={color} color={color} onClick={()=>{handleColorCircles(color)}}/>)}
+              {COLORS.map((color) => (
+                <CircleColors
+                  key={color}
+                  color={color}
+                  onClick={() => {
+                    handleColorCircles(color);
+                  }}
+                />
+              ))}
             </div>
+            {!colorState.length ? isEdit  ? <MsgError msg={ "enter a valid color"} />:<MsgError msg={ error.color }/>: null }
+
+            <Select selected={isEdit && product?.category ? product?.category : selected} setSelected={setSelected} />
+
             <div className="my-2 grid grid-cols-2 gap-1">
               <ProductButton
                 className="!bg-[#673ab7]
@@ -105,6 +188,13 @@ const handleColorCircles = (color: string)=>{
         text-cyan-50 rounded-md"
                 onClick={() => {
                   setProduct(defaultProductObj);
+                  setError({
+                    title: "",
+                    description: "",
+                    image: "",
+                    price: "",
+                    color: "",
+                  });
                   close();
                 }}
                 width="w-full"
@@ -116,8 +206,12 @@ const handleColorCircles = (color: string)=>{
         </Modal>
       )}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mx-auto">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {productsData.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            handleEditData={handleEditData}
+          />
         ))}
       </div>
     </>

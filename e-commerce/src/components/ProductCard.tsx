@@ -2,31 +2,24 @@ import { ProductImage } from "./ProductImage";
 import { ProductButton } from "./ProductButton";
 import { IProduct } from "../interfaces";
 import { txtSlicer } from "../utils/functions";
-import Modal from "./Modal";
-import { useState } from "react";
 interface IProps {
   product: IProduct;
+  handleEditData: (product:IProduct)=>void
 }
-export const ProductCard = ({ product }: IProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  function open() {
-    setIsOpen(true);
-  }
-
-  function close() {
-    setIsOpen(false);
-  }
+export const ProductCard = ({ product, handleEditData }: IProps) => {
+console.log(product?.category?.image);
 
   return (
     <div className="max-w-sm md:max-w-lg w-full border border-gray-300 rounded-md p-2 flex flex-col ">
       <ProductImage
         alt="product-img"
         src={product.image}
-        styles="rounded max-h-54"
+        styles="rounded max-h-54 h-54"
+
       />
-      <h3 className="text-start text-zinc-700 font-semibold text-xl my-2">{product.category}</h3>
-      <p className="text-start font-normal text-sm">{txtSlicer(product.description)} </p>
+      <h3 className="text-start text-zinc-700 font-semibold text-xl my-2
+      overflow-hidden truncate">{product.title}</h3>
+      <p className="text-start font-normal text-sm h-16">{txtSlicer(product.description)} </p>
       <div className="flex gap-1 items-center my-2 ">
         {product?.colors?.map((color) => (
           <span
@@ -40,7 +33,7 @@ export const ProductCard = ({ product }: IProps) => {
         <span className="">{product.price}$</span>
         <ProductImage
           alt="product-img"
-          src="https://picsum.photos/150"
+          src={product?.category?.image && product?.category?.image}
           styles="w-10 h-10 rounded-full"
         />
       </div>
@@ -48,9 +41,7 @@ export const ProductCard = ({ product }: IProps) => {
         <ProductButton
           className="!bg-[#673ab7]
         text-cyan-50 rounded-md"
-          onClick={() => {
-            open();
-          }}
+          onClick={()=>handleEditData(product)}
           width="w-full"
         >
           Edit
@@ -65,23 +56,7 @@ export const ProductCard = ({ product }: IProps) => {
           Delete
         </ProductButton>
       </div>
-      {isOpen && (
-        <Modal isOpen={isOpen} close={close}>
-          {" "}
-          <div className="my-2">
-            <ProductButton
-              className="!bg-[#673ab7]
-        text-cyan-50 rounded-md"
-              onClick={() => {
-                open();
-              }}
-              width="w-full"
-            >
-              Submit
-            </ProductButton>
-          </div>
-        </Modal>
-      )}
+
     </div>
   );
 };

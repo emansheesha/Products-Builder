@@ -12,20 +12,34 @@ export interface IProductButton extends ButtonHTMLAttributes<HTMLButtonElement> 
     width: "w-fit" | "w-full"
 }
 export interface IProduct {
-    id?: number;
+    id: number;
     title: string;
     description: string;
     image: string;
     price: string;
     colors?: string[];
+    category?: ICategory;
+
+}
+export interface ICategory{
+    id?: number;
+    image: string;
     category?: string;
 
 }
-export interface IFormProduct {
+export interface IFormProductError extends IFormProduct {
     title: string;
     description: string;
     image: string;
     price: string;
+    color: string;
+}
+export interface IFormProduct{
+    title: string;
+    description: string;
+    image: string;
+    price: string;
+    colors?: string[];
 }
 export interface IFormInput {
     title: "title" |
