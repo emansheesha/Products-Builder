@@ -1,4 +1,4 @@
-import {  IFormProduct, IFormProductError } from "../interfaces";
+import { IFormProduct, IFormProductError } from "../interfaces";
 
 export const productValidation = (product: IFormProduct) => {
     const errors: IFormProductError = {
@@ -8,8 +8,6 @@ export const productValidation = (product: IFormProduct) => {
         image: '',
         color: ''
     }
-    console.log("product",product);
-    
     const titleLength = product.title.length;
     const descriptionLength = product.description.length;
     const fileImg = "https?:\/\/.*\.(png|jpe?g|gif|webp|bmp|tiff?)";

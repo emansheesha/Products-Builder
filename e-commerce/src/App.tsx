@@ -10,6 +10,7 @@ import { productValidation } from "./validation";
 import MsgError from "./components/MsgError";
 import { CircleColors } from "./components/CircleColors";
 import Select from "./components/Select";
+import DeleteDialoge from "./components/DeleteDialoge";
 
 function App() {
   const defaultProductObj = {
@@ -25,8 +26,10 @@ function App() {
   const [productsData, setProductsData] = useState<any[]>(products);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
   const [selected, setSelected] = useState(Category[3]);
+  const [productId, setProductId] = useState<number>(0);
   const [productToEdit, setProductToEdit] =
     useState<IProduct>(defaultProductObj);
+  let [isDeleteDialogeOpen, setIsDeleteDialogeOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   console.log(selected);
   const [error, setError] = useState<IFormProductError>({
@@ -61,25 +64,30 @@ function App() {
     console.log(product, colorState, isEdit);
 
     if (isEdit) {
-      const errors = productValidation({...productToEdit, colors:[...colorState]});
+      const errors = productValidation({
+        ...productToEdit,
+        colors: [...colorState],
+      });
       setError(errors);
       const hasErrorMsg = Object.values(errors).every((value) => value === "");
       if (!hasErrorMsg) return;
       setProductsData((prev) =>
         prev.map((prod) =>
-          prod.id === productToEdit.id ? {...productToEdit,colors:[...colorState]} : prod
+          prod.id === productToEdit.id
+            ? { ...productToEdit, colors: [...colorState] }
+            : prod
         )
       );
     } else {
       const errors = productValidation({
         ...product,
         colors: [...colorState],
-            });
+      });
       setError(errors);
       const hasErrorMsg = Object.values(errors).every((value) => value === "");
       console.log(product, colorState, errors);
       if (!hasErrorMsg) return;
-      console.log(colorState)
+      console.log(colorState);
       setProductsData((prev) => [
         ...prev,
         {
@@ -114,6 +122,9 @@ function App() {
     {
       product?.colors && setColorState(product?.colors);
     }
+  };
+  const handleDeleteProduct = () => {
+    setProductsData((prev) => prev.filter((prod) => prod.id !== productId));
   };
   return (
     <>
@@ -171,9 +182,20 @@ function App() {
                 />
               ))}
             </div>
-            {!colorState.length ? isEdit  ? <MsgError msg={ "enter a valid color"} />:<MsgError msg={ error.color }/>: null }
+            {!colorState.length ? (
+              isEdit ? (
+                <MsgError msg={"enter a valid color"} />
+              ) : (
+                <MsgError msg={error.color} />
+              )
+            ) : null}
 
-            <Select selected={isEdit && product?.category ? product?.category : selected} setSelected={setSelected} />
+            <Select
+              selected={
+                isEdit && product?.category ? product?.category : selected
+              }
+              setSelected={setSelected}
+            />
 
             <div className="my-2 grid grid-cols-2 gap-1">
               <ProductButton
@@ -211,9 +233,18 @@ function App() {
             key={product.id}
             product={product}
             handleEditData={handleEditData}
+            setIsDeleteDialogeOpen={setIsDeleteDialogeOpen}
+            setProductId={setProductId}
           />
         ))}
       </div>
+      {isDeleteDialogeOpen && (
+        <DeleteDialoge
+          setIsDeleteDialogeOpen={setIsDeleteDialogeOpen}
+          handleDeleteProduct={handleDeleteProduct}
+          isDeleteDialogeOpen={isDeleteDialogeOpen}
+        />
+      )}
     </>
   );
 }
